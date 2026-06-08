@@ -115,3 +115,46 @@ A few things worth knowing before quoting numbers from this dataset:
 [MIT](LICENSE). Data sourced from SNIIM (public domain) — please attribute when using.
 
 ---
+
+<a id="-tortillanomics-es"></a>
+# 🌽 tortillanomics (ES)
+
+Rastreando el precio de la tortilla en México, desde 2007.
+
+## ¿Qué es esto?
+
+Un proyecto que extrae los precios diarios de la tortilla desde [SNIIM](https://www.economia-sniim.gob.mx/TortillaMesPorDia.asp), los modela con dbt, y publica archivos Parquet limpios para que cualquiera pueda hacer consultas.
+
+**~250,000 filas. 56 ciudades. 19 años de historia. Dos canales: tortillerías y autoservicios.**
+
+## ¿Por qué lo construí?
+
+La tortilla es el bien de consumo mexicano por excelencia. SNIIM publica precios desde 2007 en tablas HTML que se disfrazan de Excel, pero nadie las había convertido en algo realmente consultable. Quería aprender dbt en serio y construir algo útil para mi país usando datos públicos. Esto es ambas cosas.
+
+A largo plazo quiero hacer lo mismo con el resto de la canasta básica (huevo, frijol, leche, aceite) usando la misma estructura de modelos.
+
+## Qué muestran los datos
+
+- **La tortilla cuesta ~3x más que hace 16 años.** ~$9/kg en 2010, ~$28/kg en 2026.
+- **La crisis de la tortilla 2011–2012 está en los datos.** Varias ciudades vieron 50%+ de inflación anual a principios de 2012, consecuencia de la sequía en EE.UU. que disparó el precio del maíz.
+- **Los autoservicios son ~40–60% más baratos que las tortillerías.** No por eficiencia: venden un producto distinto (Super vs. Tortillerias).
+- **Las ciudades más caras tienden a estar en la frontera norte** (Cd. Juárez, Tijuana, Hermosillo); las más baratas en el sur (Tampico, Xalapa, Puebla).
+
+## Cómo usar los datos
+
+Mismos enlaces y ejemplos que arriba — los archivos Parquet en GitHub Releases funcionan directamente desde DuckDB, Python, R o el navegador.
+
+## Cómo ejecutarlo localmente
+
+```bash
+git clone https://github.com//tortillanomics
+cd tortillanomics
+uv sync
+cd tortillanomics_dbt
+dbt deps --profiles-dir .
+dbt build --profiles-dir .
+```
+
+## Licencia
+
+[MIT](LICENSE). Datos de SNIIM (dominio público) — favor de citar la fuente.
