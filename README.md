@@ -28,7 +28,7 @@ A few things I found interesting while building this:
 
 - **Tortillas are ~3x more expensive than 16 years ago.** Roughly $9/kg in 2010, ~$28/kg in 2026.
 - **The 2011–2012 tortilla crisis is in the data.** Some cities saw 50%+ year-over-year inflation in early 2012 — the result of the US Midwest drought spiking corn prices.
-- **Supermarkets are ~40–60% cheaper than tortillerías.** Not because they're more efficient; they sell a different product (industrial brands like Maseca vs. fresh nixtamal). The two channels aren't directly comparable.
+- **Supermarkets are ~40–60% cheaper than tortillerías.** Not because they're more efficient; they sell a different product (industrial brands vs fresh made tortillas). The two channels aren't directly comparable.
 - **The most expensive cities tend to be on the northern border** (Ciudad Juárez, Tijuana, Hermosillo). The cheapest tend to be in the south (Tampico, Xalapa, Puebla).
 
 **Stack:** Python 3.13, `uv`, dbt-duckdb, DuckDB, GitHub Actions, GitHub Pages.
