@@ -219,6 +219,9 @@ __marimo__/
 
 *.duckdb
 
-/data
+# dbt artifacts
+target/
+dbt_packages/
+logs/
 
 profiles.yml
