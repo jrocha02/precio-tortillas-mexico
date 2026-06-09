@@ -57,7 +57,7 @@ import duckdb
 # Top 10 most expensive cities, latest month
 duckdb.sql("""
     SELECT ciudad_canonical, precio_mensual
-    FROM 'https://github.com//tortillanomics/releases/latest/download/fct_tortilla_prices_daily.parquet'
+    FROM 'https://github.com/jrocha02/tortillanomics/releases/latest/download/fct_tortilla_prices_daily.parquet'
     WHERE canal = 'tortillerias'
       AND mes = (SELECT max(mes) FROM 'https://...')
     ORDER BY precio_mensual DESC LIMIT 10
@@ -66,12 +66,12 @@ duckdb.sql("""
 
 Or in R:
 ```r
-df <- arrow::read_parquet("https://github.com//tortillanomics/releases/latest/download/fct_tortilla_prices_daily.parquet")
+df <- arrow::read_parquet("https://github.com/jrocha02/tortillanomics/releases/latest/download/fct_tortilla_prices_daily.parquet")
 ```
 
 Or in your terminal:
 ```bash
-duckdb -c "SELECT * FROM 'https://github.com//tortillanomics/releases/latest/download/fct_tortilla_prices_daily.parquet' WHERE ciudad_canonical = 'Culiacán' LIMIT 10"
+duckdb -c "SELECT * FROM 'https://github.com/jrocha02/tortillanomics/releases/latest/download/fct_tortilla_prices_daily.parquet' WHERE ciudad_canonical = 'Culiacán' LIMIT 10"
 ```
 
 ## Run it locally
