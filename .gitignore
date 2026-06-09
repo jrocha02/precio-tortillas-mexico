@@ -223,5 +223,3 @@ __marimo__/
 target/
 dbt_packages/
 logs/
-
-profiles.yml
