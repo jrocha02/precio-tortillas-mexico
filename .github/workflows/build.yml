@@ -1,0 +1,89 @@
+name: Tortillanomics
+on:
+  push:
+    branches: [main]
+  schedule:
+    - cron: "0 8 * * 2,4,6"
+
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }} -${{ github.ref }}
+  cancel-in-progress: false
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v3
+        with:
+          enable-cache: true
+
+      - name: Set up Python
+        run: uv python install 3.13
+
+      - name: Install dependencies
+        run: uv sync
+
+      - name: Scrape latest month
+        run: uv run python -m ingestion.scrape_sniim --latest
+        continue-on-error: true # don't fail the whole build if SNIIM is down
+
+      - name: Install dbt packages
+        working-directory: tortillanomics_dbt
+        run: uv run dbt deps --profiles-dir .
+
+      - name: Build dbt models
+        working-directory: tortillanomics_dbt
+        run: uv run dbt build --profiles-dir .
+
+      - name: Export marts as parquet
+        working-directory: tortillanomics_dbt
+        run: |
+          mkdir -p ../publish
+          uv run python -c "
+          import duckdb
+          con = duckdb.connect('../dev.duckdb')
+          marts = ['dim_city', 'fct_tortilla_prices_daily',
+                   'mart_price_inflation', 'mart_price_dispersion',
+                   'mart_channel_gap']
+          for m in marts:
+              con.execute(f\"COPY main_marts.{m} TO '../publish/{m}.parquet' (FORMAT PARQUET)\")
+              print(f'Exported {m}')
+          "
+
+      - name: Upload parquet to latest release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: latest
+          name: Latest data
+          files: publish/*.parquet
+          body: |
+            Latest tortilla price data, refreshed automatically.
+            Built from commit ${{ github.sha }}.
+          # Overwrite previous "latest" release each time
+          make_latest: true
+
+      - name: Generate dbt docs
+        working-directory: tortillanomics_dbt
+        run: uv run dbt docs generate --profiles-dir .
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: tortillanomics_dbt/target
+
+      - name: Deploy to Pages
+        uses: actions/deploy-pages@v4
