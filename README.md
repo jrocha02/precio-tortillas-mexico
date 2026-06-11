@@ -27,9 +27,7 @@ It's also a step toward something bigger — eventually I want to do the same fo
 A few things I found interesting while building this:
 
 - **Tortillas are ~3x more expensive than 16 years ago.** Roughly $9/kg in 2010, ~$28/kg in 2026.
-- **The 2011–2012 tortilla crisis is in the data.** Some cities saw 50%+ year-over-year inflation in early 2012 — the result of the US Midwest drought spiking corn prices.
 - **Supermarkets are ~40–60% cheaper than tortillerías.** Not because they're more efficient; they sell a different product (industrial brands vs fresh made tortillas). The two channels aren't directly comparable.
-- **The most expensive cities tend to be on the northern border** (Ciudad Juárez, Tijuana, Hermosillo). The cheapest tend to be in the south (Tampico, Xalapa, Puebla).
 
 **Stack:** Python 3.13, `uv`, dbt-duckdb, DuckDB, GitHub Actions, GitHub Pages.
 
@@ -99,7 +97,7 @@ A few things worth knowing before quoting numbers from this dataset:
 
 - **Tortillerías channel begins 2010.** SNIIM only published autoservicios before that.
 - **Coverage varies year to year.** Autoservicios covers ~50–56 cities; tortillerías covers ~41–43.
-- **Channel comparisons aren't apples-to-apples.** Supermarkets sell industrial brands (Maseca, Bimbo); tortillerías sell fresh nixtamal. The price gap reflects product type, not market efficiency.
+- **Channel comparisons aren't apples-to-apples.** Supermarkets sell industrial generic brands; tortillerías sell fresh nixtamal. The price gap reflects product type, not market efficiency.
 - **2026 is incomplete.** Year-to-date only.
 - **SNIIM occasionally revises past months.** A snapshot model tracks revisions if you care.
 
@@ -130,6 +128,11 @@ A few things worth knowing before quoting numbers from this dataset:
 - [ ] Add a small Evidence.dev / Streamlit dashboard
 - [ ] Expand to canasta básica (huevo, frijol, leche, aceite) — same model structure, new sources
 - [ ] News geocoding layer that pairs price changes with news mentions
+
+**🔗 [Live dashboard](https://jrocha02.github.io/tortillanomics/)** · **📚 [dbt docs](https://jrocha02.github.io/tortillanomics/dbt-docs/)** · **📦 [Download data](https://github.com/jrocha02/tortillanomics/releases/latest)**
+
+[![Dashboard preview](docs/dashboard.png)](https://jrocha02.github.io/tortillanomics/)
+
 
 ## License
 
