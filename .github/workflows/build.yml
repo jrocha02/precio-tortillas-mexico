@@ -41,7 +41,7 @@ jobs:
       - name: Set up node
         uses: actions/setup-node@v4
         with:
-          node_version: 20
+          node-version: 20
           cache: npm
           cache-dependency-path: dashboard/package-lock.json
 
@@ -90,14 +90,16 @@ jobs:
 
       - name: Build Evidence dashboard
         working-directory: dashboard
-        run: npm run sources
+        run: |
+          npm run sources
           npm run build
         env:
           NODE_OPTIONS: "--max-old-space-size=4096"
 
       - name: Combine outputs for Pages
-        run: mkdir -p _site
-          cp -r dashboard/build/*_site
+        run: |
+          mkdir -p _site
+          cp -r dashboard/build/* _site/
           mkdir -p _site/dbt-docs
           cp -r tortillanomics_dbt/target/* _site/dbt-docs/
 
