@@ -95,6 +95,7 @@ jobs:
           npm run build
         env:
           NODE_OPTIONS: "--max-old-space-size=4096"
+          VITE_EVIDENCE_BASE_PATH: /tortillanomics
 
       - name: Combine outputs for Pages
         run: |
