@@ -38,6 +38,13 @@ jobs:
         run: uv run python -m ingestion.scrape_sniim --latest
         continue-on-error: true # don't fail the whole build if SNIIM is down
 
+      - name: Set up node
+        uses: actions/setup-node@v4
+        with:
+          node_version: 20
+          cache: npm
+          cache-dependency-path: dashboard/package-lock.json
+
       - name: Install dbt packages
         working-directory: tortillanomics_dbt
         run: uv run dbt deps --profiles-dir .
@@ -77,13 +84,30 @@ jobs:
         working-directory: tortillanomics_dbt
         run: uv run dbt docs generate --profiles-dir .
 
+      - name: Install Evidence
+        working-directory: dashboard
+        run: npm ci
+
+      - name: Build Evidence dashboard
+        working-directory: dashboard
+        run: npm run sources
+          npm run build
+        env:
+          NODE_OPTIONS: "--max-old-space-size=4096"
+
+      - name: Combine outputs for Pages
+        run: mkdir -p _site
+          cp -r dashboard/build/*_site
+          mkdir -p _site/dbt-docs
+          cp -r tortillanomics_dbt/target/* _site/dbt-docs/
+
       - name: Setup Pages
         uses: actions/configure-pages@v5
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: tortillanomics_dbt/target
+          path: _site
 
       - name: Deploy to Pages
         uses: actions/deploy-pages@v4
