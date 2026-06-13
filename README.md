@@ -160,7 +160,6 @@ A largo plazo quiero hacer lo mismo con el resto de la canasta básica (huevo, f
 ## Qué muestran los datos
 
 - **La tortilla cuesta ~3x más que hace 16 años.** ~$9/kg en 2010, ~$28/kg en 2026.
-- **La crisis de la tortilla 2011–2012 está en los datos.** Varias ciudades vieron 50%+ de inflación anual a principios de 2012, consecuencia de la sequía en EE.UU. que disparó el precio del maíz.
 - **Los autoservicios son ~40–60% más baratos que las tortillerías.** No por eficiencia: venden un producto distinto (Super vs. Tortillerias).
 - **Las ciudades más caras tienden a estar en la frontera norte** (Cd. Juárez, Tijuana, Hermosillo); las más baratas en el sur (Tampico, Xalapa, Puebla).
 
