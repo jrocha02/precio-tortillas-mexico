@@ -57,8 +57,7 @@ significativa.
 
 ## Top 10: Los peores momentos de inflación
 
-Las combinaciones de ciudad y mes con mayor aumento de precio respecto al año
-anterior:
+Las 10 ciudades más golpeadas por la inflación 
 
 ```sql top_inflation
 WITH peak_per_city AS (
