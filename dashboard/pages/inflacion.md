@@ -43,7 +43,6 @@ ORDER BY mes
     data={yoy_nacional}
     x=mes
     y=inflacion_yoy_nacional
-    series=canal
     title="Inflación anualizada (YoY) — promedio nacional"
     yAxisTitle="Cambio anual (%)"
     yFmt=pct1
@@ -75,6 +74,7 @@ WITH peak_per_city AS (
     FROM tortilla.inflation
     WHERE inflacion_yoy IS NOT NULL
       AND ciudad_canonical IS NOT NULL
+      and canal = '${inputs.selected_canal.value}'
 )
 SELECT
     ciudad_canonical,
