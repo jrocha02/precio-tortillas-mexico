@@ -14,7 +14,6 @@ with daily as (
 ),
 
 monthly as (
-    -- Average price per city/channel/month — the natural grain for inflation
     select
         city_id,
         ciudad_canonical,
@@ -27,6 +26,37 @@ monthly as (
     group by 1, 2, 3, 4, 5, 6
 ),
 
+with_change_flag as (
+    select
+        *,
+        case
+            when precio_mensual != lag(precio_mensual) over (
+                partition by city_id, canal order by mes
+            ) then 1
+            else 0
+        end as changed
+    from monthly
+),
+
+first_real_change as (
+    select
+        city_id,
+        canal,
+        min(mes) as primera_observacion_real
+    from with_change_flag
+    where changed = 1
+    group by city_id, canal
+),
+
+eligible as (
+    select m.*
+    from monthly m
+    inner join first_real_change r
+        on m.city_id = r.city_id
+       and m.canal = r.canal
+    where m.mes >= r.primera_observacion_real + interval '12 months'
+),
+
 with_lags as (
     select
         *,
@@ -37,7 +67,7 @@ with_lags as (
             order by mes
             rows between 11 preceding and current row
         ) as precio_promedio_12m
-    from monthly
+    from eligible
     window w as (partition by city_id, canal order by mes)
 )
 

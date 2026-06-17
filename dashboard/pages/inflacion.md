@@ -61,6 +61,22 @@ Las combinaciones de ciudad y mes con mayor aumento de precio respecto al año
 anterior:
 
 ```sql top_inflation
+WITH peak_per_city AS (
+    SELECT
+        ciudad_canonical,
+        estado_canonical,
+        canal,
+        mes,
+        precio_mensual,
+        inflacion_yoy,
+        ROW_NUMBER() OVER (
+            PARTITION BY ciudad_canonical, canal 
+            ORDER BY inflacion_yoy DESC
+        ) AS rn
+    FROM tortilla.inflation
+    WHERE inflacion_yoy IS NOT NULL
+      AND ciudad_canonical IS NOT NULL
+)
 SELECT
     ciudad_canonical,
     estado_canonical,
@@ -68,11 +84,11 @@ SELECT
     canal,
     precio_mensual,
     inflacion_yoy
-FROM tortilla.inflation
-WHERE inflacion_yoy IS NOT NULL 
-  AND ciudad_canonical IS NOT NULL and canal = '${inputs.selected_canal.value}'
+FROM peak_per_city
+WHERE rn = 1
 ORDER BY inflacion_yoy DESC
 LIMIT 10
+
 ```
 
 <DataTable data={top_inflation} rows=10>
