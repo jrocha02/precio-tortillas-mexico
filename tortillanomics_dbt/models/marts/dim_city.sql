@@ -17,6 +17,7 @@ joined as (
         s.estado_canonical,
         s.ciudad_canonical,
         s.inegi_state_code,
+        s.inegi_municipio_code,
         s.region,
         s.population_2020,
         s.is_zona_metropolitana

@@ -6,6 +6,7 @@ seeds:
     config:
       column_types:
         inegi_state_code: varchar
+        inegi_municipio_code: varchar
         population_2020: integer
         is_zona_metropolitana: boolean
     columns:
@@ -22,6 +23,9 @@ seeds:
           - not_null
           - accepted_values:
               values: ["Norte", "Centro-Norte", "Centro", "Occidente", "Sur"]
+      - name: inegi_municipio_code
+        description: "INEGI 5 digit municipio code CVEGEO"
+        tests: [not_null]
     tests:
       - dbt_utils.unique_combination_of_columns:
           combination_of_columns: [estado_raw, ciudad_raw]

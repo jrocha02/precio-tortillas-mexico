@@ -6,20 +6,28 @@ title: Tortillanomics
 
 Desde 2007. Datos del SNIIM, modelados con dbt, actualizados cada semana.
 
-
 <BigValue 
     data={precio_actual.filter(d => d.canal === 'tortillerias')}
     value=precio
-    title="Precio actual (tortillerías)"
+    title="Precio promedio (tortillerías)"
+    fmt="$#,##0.00"
+/>
+
+<BigValue 
+    data={precio_actual.filter(d => d.canal === 'autoservicios')}
+    value=precio
+    title="Precio promedio (autoservicios)"
     fmt="$#,##0.00"
 />
 
 <BigValue 
     data={precio_actual.filter(d => d.canal === 'tortillerias')}
     value=inflacion_yoy
-    title="Inflación últimos 12 meses"
+    title="Inflación 12m (tortillerías)"
     fmt=pct1
 />
+
+
 
 ```sql precio_nacional_mensual
 SELECT
@@ -43,16 +51,36 @@ ORDER BY mes
 
 ```sql precio_actual
 SELECT 
-    ciudad_canonical as ciudad,
-    estado_canonical as estado,
-    region,
     canal,
-    precio_mensual AS precio,
-    inflacion_yoy
+    AVG(precio_mensual) AS precio,
+    AVG(inflacion_yoy) AS inflacion_yoy
 FROM tortilla.inflation
 WHERE mes = (SELECT MAX(mes) FROM tortilla.inflation)
   AND ciudad_canonical IS NOT NULL
-  AND canal = 'tortillerias'
-ORDER BY precio_mensual DESC
-LIMIT 15
+GROUP BY canal
 ```
+
+## Precio por municipio
+
+```sql municipio_prices
+SELECT 
+    c.inegi_municipio_code AS cvegeo,
+    c.ciudad_canonical,
+    AVG(i.precio_mensual) AS precio
+FROM tortilla.inflation i
+JOIN tortilla.city c USING (city_id)
+WHERE i.mes = (SELECT MAX(mes) FROM tortilla.inflation)
+  AND i.canal = 'tortillerias'
+  AND c.inegi_municipio_code IS NOT NULL
+GROUP BY 1, 2
+```
+
+<AreaMap
+    data={municipio_prices}
+    areaCol=cvegeo
+    geoJsonUrl='/tortillanomics/mexico_municipios.geojson'
+    geoId=CVEGEO
+    value=precio
+    valueFmt="$#,##0.00"
+    title="Precio actual de la tortilla por municipio (tortillerías)"
+/>
