@@ -2,7 +2,7 @@
 title: Tortillanomics
 ---
 
-# 🌽 El precio de la tortilla en México
+# El precio de la tortilla en México
 
 Desde 2007. Datos del SNIIM, modelados con dbt, actualizados cada semana.
 
@@ -83,4 +83,9 @@ GROUP BY 1, 2
     value=precio
     valueFmt="$#,##0.00"
     title="Precio actual de la tortilla por municipio (tortillerías)"
+    name=ciudad_canonical
+    tooltip={[
+        {id: 'ciudad_canonical', title: 'Ciudad'},
+        {id: 'precio', fmt: '$#,##0.00', title: 'Precio (MXN/kg)'}
+    ]}
 />
