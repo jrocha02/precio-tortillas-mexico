@@ -18,7 +18,7 @@ If you want to know how much tortillas cost in Culiacán in March 2014, this rep
 
 ## Why I built it
 
-Tortillas are the canonical Mexican consumer good. SNIIM has been publishing prices since 2007 in clunky HTML tables that pretend to be Excel files, but nobody had turned them into something queryable. I wanted to learn dbt properly, and I wanted to build something useful for my country with public data. This is both.
+Tortillas are the canonical Mexican consumer good. SNIIM has been publishing prices since 2007 in clunky HTML tables but nobody had turned them into something queryable. I wanted to learn dbt properly, and I wanted to build something useful for my country with public data. This is both.
 
 It's also a step toward something bigger — eventually I want to do the same for the rest of the *canasta básica* (eggs, beans, milk, oil) using the same model structure.
 
@@ -170,7 +170,7 @@ Un proyecto que extrae los precios diarios de la tortilla desde [SNIIM](https://
 
 ## ¿Por qué lo construí?
 
-La tortilla es el bien de consumo mexicano por excelencia. SNIIM publica precios desde 2007 en tablas HTML que se disfrazan de Excel, pero nadie las había convertido en algo realmente consultable. Quería aprender dbt en serio y construir algo útil para mi país usando datos públicos. Esto es ambas cosas.
+La tortilla es el bien de consumo mexicano por excelencia. SNIIM publica precios desde 2007 en tablas HTML, pero nadie las había convertido en algo realmente consultable. Quería aprender dbt en serio y construir algo útil para mi país usando datos públicos. Esto es ambas cosas.
 
 A largo plazo quiero hacer lo mismo con el resto de la canasta básica (huevo, frijol, leche, aceite) usando la misma estructura de modelos.
 
