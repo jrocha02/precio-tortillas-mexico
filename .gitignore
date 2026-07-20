@@ -234,3 +234,6 @@ web/.svelte-kit/
 web/src/lib/data/
 # build-time parquet exports
 publish/
+
+.DS_Store/
+.DS_Store
