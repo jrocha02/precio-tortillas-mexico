@@ -1,4 +1,4 @@
-# 🌽 tortillanomics
+# Precio de las tortillas en México
 
 Tracking the price of tortillas across Mexico, since 2007.
 
@@ -29,20 +29,23 @@ A few things I found interesting while building this:
 - **Tortillas are ~3x more expensive than 16 years ago.** Roughly $9/kg in 2010, ~$28/kg in 2026.
 - **Supermarkets are ~40–60% cheaper than tortillerías.** Not because they're more efficient; they sell a different product (industrial brands vs fresh made tortillas). The two channels aren't directly comparable.
 
-**Stack:** Python 3.13, `uv`, dbt-duckdb, DuckDB, GitHub Actions, GitHub Pages.
+**Stack:** Python 3.13, `uv`, dbt-duckdb, DuckDB, GitHub Actions, GitHub Pages, SvelteKit (static) + ECharts + Leaflet/OpenStreetMap.
 
 ## Project structure
 ```
-tortillanomics/
+precio-tortillas-mexico/
 ├── ingestion/              # Python scraper (SNIIM HTML → Parquet)
 ├── data/raw/               # Partitioned Parquet by year / month / channel
+├── data/geo/               # Mexican municipio GeoJSON (build-time only, for map centroids)
 ├── tortillanomics_dbt/     # dbt project
 │   ├── models/
 │   │   ├── staging/        # Cleaned source data
 │   │   └── marts/          # dim_city, fct_tortilla_prices_daily, 3 analytical marts
 │   ├── seeds/cities.csv    # Hand-curated city dimension (INEGI codes, region, etc.)
 │   └── packages.yml        # dbt_utils, dbt_expectations
-└── .github/workflows/      # CI: scrape → build → publish parquet → deploy docs
+├── web/                    # SvelteKit static site (ECharts + Leaflet/OSM)
+│   └── scripts/prepare-data.py  # bakes mart Parquet → JSON at build time
+└── .github/workflows/      # CI: scrape → build → publish parquet → deploy site
 ```
 
 ## Use the data
@@ -55,7 +58,7 @@ import duckdb
 # Top 10 most expensive cities, latest month
 duckdb.sql("""
     SELECT ciudad_canonical, precio_mensual
-    FROM 'https://github.com/jrocha02/tortillanomics/releases/latest/download/fct_tortilla_prices_daily.parquet'
+    FROM 'https://github.com/jrocha02/precio-tortillas-mexico/releases/latest/download/fct_tortilla_prices_daily.parquet'
     WHERE canal = 'tortillerias'
       AND mes = (SELECT max(mes) FROM 'https://...')
     ORDER BY precio_mensual DESC LIMIT 10
@@ -64,19 +67,19 @@ duckdb.sql("""
 
 Or in R:
 ```r
-df <- arrow::read_parquet("https://github.com/jrocha02/tortillanomics/releases/latest/download/fct_tortilla_prices_daily.parquet")
+df <- arrow::read_parquet("https://github.com/jrocha02/precio-tortillas-mexico/releases/latest/download/fct_tortilla_prices_daily.parquet")
 ```
 
 Or in your terminal:
 ```bash
-duckdb -c "SELECT * FROM 'https://github.com/jrocha02/tortillanomics/releases/latest/download/fct_tortilla_prices_daily.parquet' WHERE ciudad_canonical = 'Culiacán' LIMIT 10"
+duckdb -c "SELECT * FROM 'https://github.com/jrocha02/precio-tortillas-mexico/releases/latest/download/fct_tortilla_prices_daily.parquet' WHERE ciudad_canonical = 'Culiacán' LIMIT 10"
 ```
 
 ## Run it locally
 
 ```bash
-git clone https://github.com//tortillanomics
-cd tortillanomics
+git clone https://github.com/jrocha02/precio-tortillas-mexico
+cd precio-tortillas-mexico
 uv sync
 
 # Build the dbt models (uses checked-in Parquet, no scraping needed)
@@ -90,6 +93,20 @@ uv run python -m ingestion.scrape_sniim --latest
 ```
 
 The DuckDB file `dev.duckdb` is created on first build; it's gitignored.
+
+### Run the website locally
+
+```bash
+# Bake the mart Parquet into JSON (falls back to the public release
+# if you haven't run a dbt build / don't have publish/*.parquet locally)
+uv run python web/scripts/prepare-data.py
+
+cd web
+npm install
+npm run dev        # dev server with hot reload
+# or a full static build:
+BASE_PATH=/precio-tortillas-mexico npm run build   # output in web/build/
+```
 
 ## Data caveats
 
@@ -125,13 +142,13 @@ A few things worth knowing before quoting numbers from this dataset:
 ## Roadmap
 
 - [ ] Fill `population_2020` in the cities seed (INEGI 2020 census)
-- [ ] Add a small Evidence.dev / Streamlit dashboard
+- [ ] Surface `mart_price_dispersion` on the site (built & published but not yet charted)
 - [ ] Expand to canasta básica (huevo, frijol, leche, aceite) — same model structure, new sources
 - [ ] News geocoding layer that pairs price changes with news mentions
 
-**🔗 [Live dashboard](https://jrocha02.github.io/tortillanomics/)** · **📚 [dbt docs](https://jrocha02.github.io/tortillanomics/dbt-docs/)** · **📦 [Download data](https://github.com/jrocha02/tortillanomics/releases/latest)**
+**🔗 [Live dashboard](https://jrocha02.github.io/precio-tortillas-mexico/)** · **📚 [dbt docs](https://jrocha02.github.io/precio-tortillas-mexico/dbt-docs/)** · **📦 [Download data](https://github.com/jrocha02/precio-tortillas-mexico/releases/latest)**
 
-[![Dashboard preview](docs/dashboard.png)](https://jrocha02.github.io/tortillanomics/)
+[![Dashboard preview](docs/dashboard.png)](https://jrocha02.github.io/precio-tortillas-mexico/)
 
 
 ## License
@@ -141,7 +158,7 @@ A few things worth knowing before quoting numbers from this dataset:
 ---
 
 <a id="-tortillanomics-es"></a>
-# 🌽 tortillanomics (ES)
+# Precio de las tortillas en México (ES)
 
 Rastreando el precio de la tortilla en México, desde 2007.
 
@@ -170,8 +187,8 @@ Mismos enlaces y ejemplos que arriba — los archivos Parquet en GitHub Releases
 ## Cómo ejecutarlo localmente
 
 ```bash
-git clone https://github.com//tortillanomics
-cd tortillanomics
+git clone https://github.com/jrocha02/precio-tortillas-mexico
+cd precio-tortillas-mexico
 uv sync
 cd tortillanomics_dbt
 dbt deps --profiles-dir .
