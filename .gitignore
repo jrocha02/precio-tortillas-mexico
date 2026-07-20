@@ -223,3 +223,14 @@ __marimo__/
 target/
 dbt_packages/
 logs/
+
+# Svelte site (web/)
+web/node_modules/
+web/build/
+web/.svelte-kit/
+# re-include web/src/lib (the generic Python `lib/` rule above would ignore it),
+# but keep the generated JSON data out of git
+!web/src/lib/
+web/src/lib/data/
+# build-time parquet exports
+publish/

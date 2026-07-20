@@ -1,0 +1,188 @@
+/* ============================================================
+   Precio de las tortillas en México — warm "maíz & masa" system
+   ============================================================ */
+
+:root {
+	/* surfaces & ink — masa & maíz (light) */
+	--bg: #fbf5e9;
+	--surface: #fffdf7;
+	--surface-2: #f2e8d5;
+	--border: #e7dac0;
+	--text: #2a2015;
+	--text-muted: #8b7a5e;
+
+	/* accents */
+	--corn: #e0a21a;
+	--corn-deep: #b07400;
+	--terracotta: #c15a2b;
+	--chili: #b23120;
+	--agave: #6e8b3d;
+
+	/* semantic aliases (used by components) */
+	--primary: var(--terracotta);
+	--accent: var(--corn);
+	--positive: var(--agave);
+	--negative: var(--chili);
+
+	--radius: 14px;
+	--radius-sm: 9px;
+	--maxw: 1000px;
+	--shadow: 0 6px 24px rgba(74, 48, 20, 0.1);
+	--shadow-lg: 0 14px 40px rgba(74, 48, 20, 0.14);
+
+	color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+	:root {
+		/* comal roasted (dark) */
+		--bg: #1c1710;
+		--surface: #262019;
+		--surface-2: #322a20;
+		--border: #3e3428;
+		--text: #f1e7d4;
+		--text-muted: #b3a184;
+
+		--corn: #f0c14e;
+		--corn-deep: #be8a10;
+		--terracotta: #e1815a;
+		--chili: #e0664b;
+		--agave: #a3be6a;
+
+		--shadow: 0 8px 28px rgba(0, 0, 0, 0.4);
+		--shadow-lg: 0 16px 44px rgba(0, 0, 0, 0.5);
+
+		color-scheme: dark;
+	}
+}
+
+* {
+	box-sizing: border-box;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+	background: var(--bg);
+	color: var(--text);
+	font-family: 'Inter Variable', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+	line-height: 1.65;
+	-webkit-font-smoothing: antialiased;
+	text-rendering: optimizeLegibility;
+}
+
+/* ---- headings: Fraunces display serif ---- */
+h1,
+h2,
+h3,
+.display {
+	font-family: 'Fraunces Variable', Georgia, 'Times New Roman', serif;
+	font-optical-sizing: auto;
+	font-weight: 600;
+	line-height: 1.15;
+	letter-spacing: -0.01em;
+	color: var(--text);
+}
+h1 {
+	font-size: clamp(2rem, 5vw, 2.9rem);
+	margin: 0 0 0.5rem;
+}
+h2 {
+	font-size: clamp(1.4rem, 3vw, 1.75rem);
+	margin: 2.75rem 0 0.6rem;
+}
+h3 {
+	font-size: 1.1rem;
+}
+
+/* Section heading with a small terracotta "corn-kernel" eyebrow rule */
+.section-title {
+	position: relative;
+	padding-top: 1.1rem;
+}
+.section-title::before {
+	content: '';
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 46px;
+	height: 5px;
+	border-radius: 3px;
+	background: var(--terracotta);
+	box-shadow:
+		14px 0 0 -1px var(--corn),
+		28px 0 0 -2px var(--agave);
+}
+
+p {
+	color: var(--text);
+}
+
+a {
+	color: var(--terracotta);
+	text-decoration: none;
+}
+a:hover {
+	text-decoration: underline;
+}
+
+blockquote {
+	margin: 1.75rem 0;
+	padding: 1rem 1.25rem;
+	border-left: 5px solid var(--corn);
+	background: var(--surface);
+	border-radius: 0 var(--radius) var(--radius) 0;
+	color: var(--text);
+	box-shadow: var(--shadow);
+}
+
+code {
+	font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+	background: var(--surface-2);
+	padding: 0.12em 0.4em;
+	border-radius: 6px;
+	font-size: 0.88em;
+}
+
+pre {
+	background: var(--surface-2);
+	padding: 1rem 1.15rem;
+	border-radius: var(--radius);
+	overflow-x: auto;
+	border: 1px solid var(--border);
+}
+pre code {
+	background: none;
+	padding: 0;
+}
+
+table {
+	border-collapse: collapse;
+	width: 100%;
+}
+
+ul {
+	padding-left: 1.2rem;
+}
+li {
+	margin: 0.3rem 0;
+}
+
+.card {
+	background: var(--surface);
+	border: 1px solid var(--border);
+	border-radius: var(--radius);
+	padding: 1.1rem 1.3rem;
+	box-shadow: var(--shadow);
+}
+
+.page {
+	max-width: var(--maxw);
+	margin: 0 auto;
+	padding: 1.5rem 1.25rem 4.5rem;
+}
+
+.tnum {
+	font-variant-numeric: tabular-nums;
+}
